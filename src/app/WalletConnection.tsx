@@ -4,6 +4,10 @@ import { FC, useEffect, useState } from "react";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 
+const addressSignaturesLimit = 5;
+const solConversionFactor = 1e9;
+const transactionBlockTimeMultiplier = 1000;
+
 const WalletConnection: FC = () => {
   const { connection } = useConnection();
   const { publicKey } = useWallet();
@@ -20,11 +24,11 @@ const WalletConnection: FC = () => {
       if (publicKey) {
         // Fetch wallet balance
         const balance = await connection.getBalance(publicKey);
-        setBalance(balance / 1e9); // Convert Lamports to SOL
+        setBalance(balance / solConversionFactor); // Convert Lamports to SOL
 
         // Fetch recent transaction signatures using the updated method
         const signatures = await connection.getSignaturesForAddress(publicKey, {
-          limit: 5,
+          limit: addressSignaturesLimit,
         });
 
         // Fetch details for each transaction
@@ -65,7 +69,9 @@ const WalletConnection: FC = () => {
                 <p>
                   Block Time:{" "}
                   {transaction?.blockTime
-                    ? new Date(transaction.blockTime * 1000).toLocaleString()
+                    ? new Date(
+                        transaction.blockTime * transactionBlockTimeMultiplier
+                      ).toLocaleString()
                     : "N/A"}
                 </p>
               </li>

@@ -1,6 +1,7 @@
 import "./globals.css";
 import "@solana/wallet-adapter-react-ui/styles.css";
 import { Inter as FontSans } from "next/font/google";
+import { ThemeProvider } from "@/components/theme-provider";
 import WalletContext from "./WalletContext";
 
 import { cn } from "@/lib/utils";
@@ -28,7 +29,14 @@ export default function RootLayout({
           fontSans.variable
         )}
       >
-        <WalletContext>{children}</WalletContext>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <WalletContext>{children}</WalletContext>
+        </ThemeProvider>
       </body>
     </html>
   );

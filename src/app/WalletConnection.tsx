@@ -3,6 +3,8 @@
 import { FC, useEffect, useState } from "react";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import BalanceCard from "@/components/balanceCard";
+import TransactionTable from "./transactions/transaction-table";
 
 const addressSignaturesLimit = 5;
 const solConversionFactor = 1e9;
@@ -59,24 +61,11 @@ const WalletConnection: FC = () => {
       {publicKey && (
         <div>
           <p>Wallet Address: {publicKey.toBase58()}</p>
-          <p>Balance: {balance !== null ? `${balance} SOL` : "Fetching..."}</p>
-          <h3>Recent Transactions:</h3>
-          <ul>
-            {transactions.map((transaction, index) => (
-              <li key={index}>
-                <p>Signature: {transaction?.transaction.signatures[0]}</p>
-                <p>Slot: {transaction?.slot}</p>
-                <p>
-                  Block Time:{" "}
-                  {transaction?.blockTime
-                    ? new Date(
-                        transaction.blockTime * transactionBlockTimeMultiplier
-                      ).toLocaleString()
-                    : "N/A"}
-                </p>
-              </li>
-            ))}
-          </ul>
+          <BalanceCard
+            SOLBalance={balance ? balance : 69}
+            USDBalance={balance ? balance : 420}
+          />
+          <TransactionTable />
         </div>
       )}
     </div>

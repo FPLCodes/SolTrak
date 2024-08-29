@@ -7,19 +7,29 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
+  SelectGroup,
 } from "@/components/ui/select";
+import { SelectLabel } from "@radix-ui/react-select";
 
 interface TransactionTableProps {
   transactions: any[];
 }
 
+const priceCache: { [key: string]: number } = {}; // Cache for historical prices
+
 const getHistoricalPrice = async (date: string) => {
+  if (priceCache[date]) {
+    return priceCache[date];
+  }
+
   try {
     const response = await fetch(
       `https://api.coingecko.com/api/v3/coins/solana/history?date=${date}`
     );
     const data = await response.json();
-    return data.market_data.current_price.usd;
+    const price = data.market_data.current_price.usd;
+    priceCache[date] = price;
+    return price;
   } catch (error) {
     console.error("Error fetching historical price:", error);
     return null;
@@ -54,19 +64,32 @@ const transformTransactions = async (transactions: any[]) => {
 const TransactionTable: FC<TransactionTableProps> = ({ transactions }) => {
   const [data, setData] = useState<any[]>([]);
   const [limit, setLimit] = useState(5); // State to track the selected limit
+  const [typeFilter, setTypeFilter] = useState<string>("All"); // State for type filter
+  const [loading, setLoading] = useState<boolean>(true); // Loading state
 
   const handleLimitChange = (value: string) => {
     setLimit(parseInt(value));
   };
 
+  const handleTypeFilterChange = (value: string) => {
+    setTypeFilter(value);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       const transformedData = await transformTransactions(transactions);
-      setData(transformedData.slice(0, limit));
+
+      const filteredData = transformedData.filter((tx) =>
+        typeFilter === "All" ? true : tx.status === typeFilter
+      );
+
+      setData(filteredData.slice(0, limit));
+      setLoading(false);
     };
 
     fetchData();
-  }, [limit, transactions]);
+  }, [limit, typeFilter, transactions]);
 
   return (
     <div>
@@ -77,14 +100,35 @@ const TransactionTable: FC<TransactionTableProps> = ({ transactions }) => {
             <SelectValue placeholder={limit.toString()} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="5">5</SelectItem>
-            <SelectItem value="10">10</SelectItem>
-            <SelectItem value="15">15</SelectItem>
-            <SelectItem value="20">20</SelectItem>
+            <SelectGroup>
+              <SelectItem value="5">5</SelectItem>
+              <SelectItem value="10">10</SelectItem>
+              <SelectItem value="15">15</SelectItem>
+              <SelectItem value="20">20</SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+
+        <h1 className="self-center">Type</h1>
+        <Select onValueChange={handleTypeFilterChange}>
+          <SelectTrigger className="w-24">
+            <SelectValue placeholder={typeFilter} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectItem value="All">All</SelectItem>
+              <SelectItem value="Success">Success</SelectItem>
+              <SelectItem value="Failed">Failed</SelectItem>
+            </SelectGroup>
           </SelectContent>
         </Select>
       </div>
-      <DataTable columns={columns} data={data} />
+
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <DataTable columns={columns} data={data} />
+      )}
     </div>
   );
 };

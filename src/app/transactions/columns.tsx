@@ -24,7 +24,7 @@ export const columns: ColumnDef<Transaction>[] = [
   },
   {
     accessorKey: "amountUsd",
-    header: "Amount (USD)",
+    header: "Txn USD Value",
     cell: ({ row }) => {
       return `$${row.original.amountUsd.toFixed(2)}`;
     },

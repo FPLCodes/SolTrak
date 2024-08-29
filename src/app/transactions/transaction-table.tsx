@@ -1,6 +1,13 @@
 import { FC, useEffect, useState } from "react";
 import { columns } from "./columns";
 import { DataTable } from "./data-table";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface TransactionTableProps {
   transactions: any[];
@@ -46,17 +53,40 @@ const transformTransactions = async (transactions: any[]) => {
 
 const TransactionTable: FC<TransactionTableProps> = ({ transactions }) => {
   const [data, setData] = useState<any[]>([]);
+  const [limit, setLimit] = useState(5); // State to track the selected limit
+
+  const handleLimitChange = (value: string) => {
+    setLimit(parseInt(value));
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       const transformedData = await transformTransactions(transactions);
-      setData(transformedData);
+      setData(transformedData.slice(0, limit));
     };
 
     fetchData();
-  }, [transactions]);
+  }, [limit, transactions]);
 
-  return <DataTable columns={columns} data={data} />;
+  return (
+    <div className="my-10">
+      <div className="flex space-x-3 mb-3 justify-end">
+        <h1 className="self-center">Limit</h1>
+        <Select onValueChange={handleLimitChange}>
+          <SelectTrigger className="w-16">
+            <SelectValue placeholder={limit.toString()} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="5">5</SelectItem>
+            <SelectItem value="10">10</SelectItem>
+            <SelectItem value="15">15</SelectItem>
+            <SelectItem value="20">20</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+      <DataTable columns={columns} data={data} />
+    </div>
+  );
 };
 
 export default TransactionTable;

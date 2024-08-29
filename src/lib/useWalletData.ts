@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 
-const addressSignaturesLimit = 5;
+const addressSignaturesLimit = 20;
 const solConversionFactor = 1e9;
 
 const useWalletData = () => {

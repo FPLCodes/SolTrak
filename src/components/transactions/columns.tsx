@@ -8,6 +8,7 @@ export type Transaction = {
   amountUsd: number;
   signature: string;
   status: string;
+  type: string;
 };
 
 export const columns: ColumnDef<Transaction>[] = [
@@ -16,10 +17,27 @@ export const columns: ColumnDef<Transaction>[] = [
     header: "Time",
   },
   {
+    accessorKey: "type",
+    header: "Type",
+    cell: ({ row }) => {
+      return (
+        <span
+          className={`px-2 py-1 rounded-full text-xs font-medium ${
+            row.original.type === "Sent"
+              ? "bg-accent text-accent-foreground"
+              : "bg-primary text-primary-foreground"
+          }`}
+        >
+          {row.original.type}
+        </span>
+      );
+    },
+  },
+  {
     accessorKey: "amountSol",
     header: "Amount (SOL)",
     cell: ({ row }) => {
-      return `${row.original.amountSol.toFixed(4)}`;
+      return `${row.original.amountSol.toFixed(5)}`;
     },
   },
   {
@@ -53,7 +71,7 @@ export const columns: ColumnDef<Transaction>[] = [
         <span
           className={`px-2 py-1 rounded-full text-xs font-medium ${
             row.original.status === "Success"
-              ? "bg-primary text-primary-foreground"
+              ? "bg-green-600 text-green-50"
               : "bg-red-600 text-red-50"
           }`}
         >

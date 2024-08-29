@@ -9,7 +9,6 @@ import {
   SelectValue,
   SelectGroup,
 } from "@/components/ui/select";
-import { SelectLabel } from "@radix-ui/react-select";
 
 interface TransactionTableProps {
   transactions: any[];
@@ -36,17 +35,27 @@ const getHistoricalPrice = async (date: string) => {
   }
 };
 
+const solConversionFactor = 1e9;
+const timeConversionFactor = 1000;
+
 const transformTransactions = async (transactions: any[]) => {
   const transformedTransactions = await Promise.all(
     transactions.map(async (tx) => {
-      const date = new Date(tx.blockTime * 1000);
+      // Format date to DD-MM-YYYY
+      const date = new Date(tx.blockTime * timeConversionFactor);
       const formattedDate = `${date.getDate()}-${
         date.getMonth() + 1
       }-${date.getFullYear()}`;
 
-      const amountSol =
-        (tx.meta.preBalances[0] - tx.meta.postBalances[0]) / 1e9;
+      // Calculate amount in SOL and USD
+      const preBalance = tx.meta.preBalances[0];
+      const postBalance = tx.meta.postBalances[0];
+      const amountSol = (preBalance - postBalance) / solConversionFactor;
       const amountUsd = (await getHistoricalPrice(formattedDate)) * amountSol;
+
+      // Determine transaction type
+      const isSender = preBalance > postBalance;
+      const transactionType = isSender ? "Sent" : "Received";
 
       return {
         time: date.toLocaleString(),
@@ -54,6 +63,7 @@ const transformTransactions = async (transactions: any[]) => {
         amountUsd: amountUsd,
         signature: tx.transaction.signatures[0],
         status: tx.meta.err === null ? "Success" : "Failed",
+        type: transactionType,
       };
     })
   );
@@ -64,11 +74,15 @@ const transformTransactions = async (transactions: any[]) => {
 const TransactionTable: FC<TransactionTableProps> = ({ transactions }) => {
   const [data, setData] = useState<any[]>([]);
   const [limit, setLimit] = useState(5); // State to track the selected limit
+  const [statusFilter, setStatusFilter] = useState<string>("All"); // State for status filter
   const [typeFilter, setTypeFilter] = useState<string>("All"); // State for type filter
-  const [loading, setLoading] = useState<boolean>(true); // Loading state
 
   const handleLimitChange = (value: string) => {
     setLimit(parseInt(value));
+  };
+
+  const handleStatusFilterChange = (value: string) => {
+    setStatusFilter(value);
   };
 
   const handleTypeFilterChange = (value: string) => {
@@ -77,19 +91,21 @@ const TransactionTable: FC<TransactionTableProps> = ({ transactions }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
       const transformedData = await transformTransactions(transactions);
 
-      const filteredData = transformedData.filter((tx) =>
-        typeFilter === "All" ? true : tx.status === typeFilter
+      const filteredData = transformedData.filter(
+        (tx) =>
+          (statusFilter === "All" ? true : tx.status === statusFilter) &&
+          (typeFilter === "All" ? true : tx.type === typeFilter)
       );
 
-      setData(filteredData.slice(0, limit));
-      setLoading(false);
+      // Apply limit after filtering
+      const limitedData = filteredData.slice(0, limit);
+      setData(limitedData);
     };
 
     fetchData();
-  }, [limit, typeFilter, transactions]);
+  }, [limit, statusFilter, typeFilter, transactions]);
 
   return (
     <div>
@@ -111,8 +127,22 @@ const TransactionTable: FC<TransactionTableProps> = ({ transactions }) => {
 
         <h1 className="self-center">Type</h1>
         <Select onValueChange={handleTypeFilterChange}>
-          <SelectTrigger className="w-24">
+          <SelectTrigger className="w-28">
             <SelectValue placeholder={typeFilter} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectItem value="All">All</SelectItem>
+              <SelectItem value="Sent">Sent</SelectItem>
+              <SelectItem value="Received">Received</SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+
+        <h1 className="self-center">Status</h1>
+        <Select onValueChange={handleStatusFilterChange}>
+          <SelectTrigger className="w-24">
+            <SelectValue placeholder={statusFilter} />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
@@ -123,12 +153,7 @@ const TransactionTable: FC<TransactionTableProps> = ({ transactions }) => {
           </SelectContent>
         </Select>
       </div>
-
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <DataTable columns={columns} data={data} />
-      )}
+      <DataTable columns={columns} data={data} />
     </div>
   );
 };

@@ -81,10 +81,7 @@ const WalletConnection: FC = () => {
           </TabsList>
           <TabsContent value="wallet">
             <div>
-              <BalanceCard
-                SOLBalance={balance ? balance : 69}
-                USDBalance={balance ? balance : 420}
-              />
+              <BalanceCard SOLBalance={balance ? balance : 69} />
               <div className="mt-3">
                 <TransactionTable transactions={transactions} />
               </div>

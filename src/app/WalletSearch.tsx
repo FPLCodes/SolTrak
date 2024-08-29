@@ -23,7 +23,6 @@ const WalletSearch = () => {
     try {
       const publicKey = new PublicKey(address.trim());
       const balance = await connection.getBalance(publicKey);
-      console.log("Fetched Balance (Lamports):", balance);
       setBalance(balance / solConversionFactor);
 
       // Fetch recent transaction signatures
@@ -42,7 +41,6 @@ const WalletSearch = () => {
       );
 
       const transactions = await Promise.all(transactionDetailsPromises);
-      console.log("Fetched Transactions:", transactions);
       setTransactions(transactions);
     } catch (err) {
       setError("Invalid address or unable to fetch data.");
@@ -74,7 +72,7 @@ const WalletSearch = () => {
       {error && <p className="text-red-500 mt-4">{error}</p>}
       {balance !== null && (
         <div className="mt-4">
-          <BalanceCard SOLBalance={balance} USDBalance={balance} />
+          <BalanceCard SOLBalance={balance} />
           <div className="mt-3">
             <TransactionTable transactions={transactions} />
           </div>

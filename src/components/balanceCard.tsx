@@ -8,14 +8,28 @@ import {
 } from "@/components/ui/card";
 
 import { cn } from "@/lib/utils";
+import { useEffect, useState } from "react";
 
-export default function BalanceCard({
-  SOLBalance,
-  USDBalance,
-}: {
-  SOLBalance: number;
-  USDBalance: number;
-}) {
+export default function BalanceCard({ SOLBalance }: { SOLBalance: number }) {
+  const [solToUsdRate, setSolToUsdRate] = useState<number>(0);
+
+  useEffect(() => {
+    // Fetch SOL to USD conversion rate from CoinGecko
+    const fetchConversionRate = async () => {
+      try {
+        const response = await fetch(
+          "https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd"
+        );
+        const data = await response.json();
+        setSolToUsdRate(data.solana.usd);
+      } catch (error) {
+        console.error("Error fetching conversion rate:", error);
+      }
+    };
+
+    fetchConversionRate();
+  }, []);
+
   return (
     <Card className={cn("w-[380px] card bg-primary rounded-2xl")}>
       <CardHeader>
@@ -28,7 +42,7 @@ export default function BalanceCard({
             {SOLBalance.toFixed(2)} SOL
           </div>
           <div className="text-sm text-muted-foreground">
-            ≈ ${USDBalance.toFixed(2)} USD
+            ≈ ${SOLBalance * solToUsdRate} USD
           </div>
         </div>
       </CardContent>

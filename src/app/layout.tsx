@@ -1,4 +1,4 @@
-import "./globals.css";
+import "./styles/globals.css";
 import "@solana/wallet-adapter-react-ui/styles.css";
 import { Inter as FontSans } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -31,7 +31,7 @@ export default function RootLayout({
       >
         <ThemeProvider
           attribute="class"
-          defaultTheme="light"
+          defaultTheme="dark"
           enableSystem
           disableTransitionOnChange
         >

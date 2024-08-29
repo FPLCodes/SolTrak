@@ -56,18 +56,19 @@ const WalletConnection: FC = () => {
   }
 
   return (
-    <div>
-      <WalletMultiButton />
-      {publicKey && (
-        <div>
-          <p>Wallet Address: {publicKey.toBase58()}</p>
-          <BalanceCard
-            SOLBalance={balance ? balance : 69}
-            USDBalance={balance ? balance : 420}
-          />
-          <TransactionTable />
-        </div>
-      )}
+    <div className="mx-auto w-2/3">
+      <div className="flex justify-between">
+        <h1>SolTrak</h1>
+        <WalletMultiButton />
+        {/* {publicKey && <p>Wallet Address: {publicKey.toBase58()}</p>} */}
+      </div>
+      <div className="mt-4">
+        <BalanceCard
+          SOLBalance={balance ? balance : 69}
+          USDBalance={balance ? balance : 420}
+        />
+        <TransactionTable />
+      </div>
     </div>
   );
 };

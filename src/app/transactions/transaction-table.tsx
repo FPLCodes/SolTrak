@@ -69,7 +69,7 @@ const TransactionTable: FC<TransactionTableProps> = ({ transactions }) => {
   }, [limit, transactions]);
 
   return (
-    <div className="my-10">
+    <div>
       <div className="flex space-x-3 mb-3 justify-end">
         <h1 className="self-center">Limit</h1>
         <Select onValueChange={handleLimitChange}>

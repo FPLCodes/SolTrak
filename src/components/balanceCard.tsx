@@ -42,7 +42,7 @@ export default function BalanceCard({ SOLBalance }: { SOLBalance: number }) {
             {SOLBalance.toFixed(2)} SOL
           </div>
           <div className="text-sm text-muted-foreground">
-            ≈ ${SOLBalance * solToUsdRate} USD
+            ≈ ${(SOLBalance * solToUsdRate).toFixed(2)}
           </div>
         </div>
       </CardContent>

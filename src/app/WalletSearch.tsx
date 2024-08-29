@@ -1,8 +1,9 @@
 import { PublicKey, Connection } from "@solana/web3.js";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import BalanceCard from "@/components/balanceCard";
 import TransactionTable from "./transactions/transaction-table";
 import { SearchIcon } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const solConversionFactor = 1e9;
 
@@ -68,15 +69,27 @@ const WalletSearch = () => {
         </button>
       </div>
 
-      {loading && <p>Loading...</p>}
       {error && <p className="text-red-500 mt-4">{error}</p>}
-      {balance !== null && (
+      {loading ? (
         <div className="mt-4">
-          <BalanceCard SOLBalance={balance} />
-          <div className="mt-3">
-            <TransactionTable transactions={transactions} />
+          <Skeleton className="w-[380px] h-[200px]"></Skeleton>
+          <div className="mt-12 flex flex-col w-full">
+            <Skeleton className="w-24 h-10 self-end"></Skeleton>
+            <Skeleton className="w-full h-10 mt-2"></Skeleton>
+            <Skeleton className="w-full h-10 mt-1"></Skeleton>
+            <Skeleton className="w-full h-10 mt-1"></Skeleton>
+            <Skeleton className="w-full h-10 mt-1"></Skeleton>
           </div>
         </div>
+      ) : (
+        balance !== null && (
+          <div className="mt-4">
+            <BalanceCard SOLBalance={balance} />
+            <div className="mt-12">
+              <TransactionTable transactions={transactions} />
+            </div>
+          </div>
+        )
       )}
     </div>
   );

@@ -82,3 +82,7 @@
 .card {
   @apply bg-card text-card-foreground;
 }
+
+.button {
+  @apply bg-primary text-primary-foreground;
+}

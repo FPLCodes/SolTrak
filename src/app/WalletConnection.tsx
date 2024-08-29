@@ -5,6 +5,7 @@ import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import BalanceCard from "@/components/balanceCard";
 import TransactionTable from "./transactions/transaction-table";
+import WalletSearch from "./WalletSearch";
 
 const addressSignaturesLimit = 5;
 const solConversionFactor = 1e9;
@@ -44,6 +45,7 @@ const WalletConnection: FC = () => {
         );
 
         const transactions = await Promise.all(transactionDetailsPromises);
+        console.log(transactions);
         setTransactions(transactions);
       }
     };
@@ -67,7 +69,8 @@ const WalletConnection: FC = () => {
           SOLBalance={balance ? balance : 69}
           USDBalance={balance ? balance : 420}
         />
-        <TransactionTable />
+        <TransactionTable transactions={transactions} />
+        <WalletSearch /> {/* Add the WalletSearch component here */}
       </div>
     </div>
   );

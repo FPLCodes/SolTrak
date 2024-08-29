@@ -6,10 +6,10 @@ import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import BalanceCard from "@/components/balanceCard";
 import TransactionTable from "./transactions/transaction-table";
 import WalletSearch from "./WalletSearch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const addressSignaturesLimit = 5;
 const solConversionFactor = 1e9;
-const transactionBlockTimeMultiplier = 1000;
 
 const WalletConnection: FC = () => {
   const { connection } = useConnection();
@@ -62,15 +62,38 @@ const WalletConnection: FC = () => {
       <div className="flex justify-between">
         <h1>SolTrak</h1>
         <WalletMultiButton />
-        {/* {publicKey && <p>Wallet Address: {publicKey.toBase58()}</p>} */}
       </div>
       <div className="mt-4">
-        <BalanceCard
-          SOLBalance={balance ? balance : 69}
-          USDBalance={balance ? balance : 420}
-        />
-        <TransactionTable transactions={transactions} />
-        <WalletSearch /> {/* Add the WalletSearch component here */}
+        <Tabs defaultValue="wallet">
+          <TabsList className="bg-transparent flex w-full justify-evenly mb-6">
+            <TabsTrigger
+              value="wallet"
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-accent-foreground text-xl"
+            >
+              Wallet
+            </TabsTrigger>
+            <TabsTrigger
+              value="search"
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-accent-foreground text-xl"
+            >
+              Search Wallet
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent value="wallet">
+            <div>
+              <BalanceCard
+                SOLBalance={balance ? balance : 69}
+                USDBalance={balance ? balance : 420}
+              />
+              <div className="mt-3">
+                <TransactionTable transactions={transactions} />
+              </div>
+            </div>
+          </TabsContent>
+          <TabsContent value="search">
+            <WalletSearch />
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );

@@ -75,7 +75,9 @@ const WalletSearch = () => {
       {balance !== null && (
         <div className="mt-4">
           <BalanceCard SOLBalance={balance} USDBalance={balance} />
-          <TransactionTable transactions={transactions} />
+          <div className="mt-3">
+            <TransactionTable transactions={transactions} />
+          </div>
         </div>
       )}
     </div>

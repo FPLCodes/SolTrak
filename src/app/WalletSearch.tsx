@@ -59,7 +59,7 @@ const WalletSearch = () => {
           value={address}
           onChange={(e) => setAddress(e.target.value)}
           placeholder="Enter wallet address"
-          className="border-border p-2 w-full mr-4 ring-ring"
+          className="p-2 w-full mr-4 rounded-md border border-input bg-transparent placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
         />
         <button
           onClick={() => fetchBalance()}
@@ -72,7 +72,7 @@ const WalletSearch = () => {
       {error && <p className="text-red-500 mt-4">{error}</p>}
       {loading ? (
         <div className="mt-4">
-          <Skeleton className="w-[380px] h-[200px]"></Skeleton>
+          <Skeleton className="w-[380px] h-[180px] rounded-lg"></Skeleton>
           <div className="mt-12 flex flex-col w-full">
             <Skeleton className="w-24 h-10 self-end"></Skeleton>
             <Skeleton className="w-full h-10 mt-2"></Skeleton>

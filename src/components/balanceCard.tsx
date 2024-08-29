@@ -31,12 +31,12 @@ export default function BalanceCard({ SOLBalance }: { SOLBalance: number }) {
   }, []);
 
   return (
-    <Card className={cn("w-[380px] card bg-primary rounded-2xl")}>
+    <Card className={cn("w-[380px] card bg-primary rounded-xl")}>
       <CardHeader>
         <CardTitle>Balance</CardTitle>
         <CardDescription>Current balance in your wallet</CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="mt-3">
         <div className="flex items-center justify-between">
           <div className="text-4xl font-semibold text-primary">
             {SOLBalance.toFixed(2)} SOL

@@ -7,6 +7,7 @@ import BalanceCard from "@/components/balanceCard";
 import TransactionTable from "./transactions/transaction-table";
 import WalletSearch from "./WalletSearch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { PublicKey } from "@solana/web3.js";
 
 const addressSignaturesLimit = 5;
 const solConversionFactor = 1e9;
@@ -38,14 +39,16 @@ const WalletConnection: FC = () => {
         const transactionDetailsPromises = signatures.map(
           async (signatureInfo) => {
             const transaction = await connection.getTransaction(
-              signatureInfo.signature
+              signatureInfo.signature,
+              {
+                maxSupportedTransactionVersion: 2,
+              }
             );
             return transaction;
           }
         );
 
         const transactions = await Promise.all(transactionDetailsPromises);
-        console.log(transactions);
         setTransactions(transactions);
       }
     };

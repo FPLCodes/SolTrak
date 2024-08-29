@@ -69,6 +69,11 @@ const WalletSearch = () => {
         </button>
       </div>
 
+      {loading == false && balance == null && (
+        <p className="mt-24 text-2xl text-muted text-center">
+          Enter a wallet address to get started
+        </p>
+      )}
       {error && <p className="text-red-500 mt-4">{error}</p>}
       {loading ? (
         <div className="mt-4">

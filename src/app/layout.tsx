@@ -2,7 +2,7 @@ import "./styles/globals.css";
 import "@solana/wallet-adapter-react-ui/styles.css";
 import { Inter as FontSans } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
-import WalletContext from "./WalletContext";
+import WalletContext from "../components/WalletContext";
 
 import { cn } from "@/lib/utils";
 

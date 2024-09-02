@@ -4,8 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 
 export type Transaction = {
   time: string;
-  amountSol: number;
-  amountUsd: string; // Change to string to account for the '+' or '-' sign
+  amountSol: string;
   signature: string;
   status: string;
 };
@@ -19,14 +18,7 @@ export const columns: ColumnDef<Transaction>[] = [
     accessorKey: "amountSol",
     header: "Amount (SOL)",
     cell: ({ row }) => {
-      return `${row.original.amountSol.toFixed(8)}`;
-    },
-  },
-  {
-    accessorKey: "amountUsd",
-    header: "Txn USD Value",
-    cell: ({ row }) => {
-      return row.original.amountUsd;
+      return `◎ ${row.original.amountSol}`;
     },
   },
   {

@@ -5,6 +5,7 @@ import TransactionTable from "./transactions/transaction-table";
 import { SearchIcon } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import Moralis from "moralis";
+import TokensTable from "./tokens/tokens-table";
 
 const solConversionFactor = 1e9;
 
@@ -12,6 +13,10 @@ const solConversionFactor = 1e9;
 const connection = new Connection(
   "https://solana-mainnet.g.alchemy.com/v2/Gm-xaejXqLMg4DNz5NaM1_B6Q81Db5SV"
 );
+
+Moralis.start({
+  apiKey: process.env.NEXT_PUBLIC_MORALIS_API_KEY,
+});
 
 const WalletSearch = () => {
   const [address, setAddress] = useState<string>("");
@@ -28,10 +33,6 @@ const WalletSearch = () => {
 
     // Fetch portfolio data
     try {
-      await Moralis.start({
-        apiKey: process.env.NEXT_PUBLIC_MORALIS_API_KEY,
-      });
-
       const response = await Moralis.SolApi.account.getPortfolio({
         network: "mainnet",
         address,
@@ -41,6 +42,7 @@ const WalletSearch = () => {
 
       setTokens(data.tokens);
       setNfts(data.nfts);
+      console.log(data.nfts);
     } catch (err) {
       setError("Invalid address or unable to fetch data.");
       console.error("Error in fetchWalletData:", err);
@@ -119,52 +121,38 @@ const WalletSearch = () => {
           </div>
         </div>
       ) : (
-        <div className="mt-4">
-          {balance !== null && <BalanceCard SOLBalance={balance} />}
-          <div className="mt-12">
-            <TransactionTable transactions={transactions} address={address} />
+        balance !== null &&
+        tokens !== null &&
+        nfts !== null && (
+          <div className="mt-4">
+            <BalanceCard SOLBalance={balance} />
+            <div className="mt-12">
+              <TransactionTable transactions={transactions} address={address} />
+            </div>
+
+            {tokens.length > 0 && <TokensTable tokens={tokens} />}
+
+            {nfts.length > 0 && (
+              <div className="mt-12">
+                <h2 className="text-xl font-bold">NFTs</h2>
+                <ul className="mt-4">
+                  {nfts.map((nft, index) => (
+                    <li key={index} className="mb-2">
+                      <div className="flex justify-between">
+                        <span>
+                          {nft.name || "Unknown NFT"} ({nft.symbol})
+                        </span>
+                        <span>
+                          {nft.amount} {nft.symbol}
+                        </span>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
-
-          {tokens.length > 0 && (
-            <div className="mt-12">
-              <h2 className="text-xl font-bold">Tokens</h2>
-              <ul className="mt-4">
-                {tokens.map((token, index) => (
-                  <li key={index} className="mb-2">
-                    <div className="flex justify-between">
-                      <span>
-                        {token.name || "Unknown Token"} ({token.symbol})
-                      </span>
-                      <span>
-                        {token.amount} {token.symbol}
-                      </span>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          {nfts.length > 0 && (
-            <div className="mt-12">
-              <h2 className="text-xl font-bold">NFTs</h2>
-              <ul className="mt-4">
-                {nfts.map((nft, index) => (
-                  <li key={index} className="mb-2">
-                    <div className="flex justify-between">
-                      <span>
-                        {nft.name || "Unknown NFT"} ({nft.symbol})
-                      </span>
-                      <span>
-                        {nft.amount} {nft.symbol}
-                      </span>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
+        )
       )}
     </div>
   );

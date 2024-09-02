@@ -3,10 +3,8 @@
 import { FC, useEffect, useState } from "react";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import WalletTabs from "./WalletTabs";
-import useWalletData from "../lib/useWalletData";
 
 const WalletConnection: FC = () => {
-  const { balance, transactions } = useWalletData();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -24,7 +22,7 @@ const WalletConnection: FC = () => {
         <WalletMultiButton />
       </div>
       <div className="mt-4">
-        <WalletTabs balance={balance} transactions={transactions} />
+        <WalletTabs />
       </div>
     </div>
   );

@@ -2,16 +2,10 @@
 
 import { FC } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import BalanceCard from "@/components/balanceCard";
-import TransactionTable from "./transactions/transaction-table";
-import WalletSearch from "./WalletSearch";
+import WalletSearch from "@/components/WalletSearch";
+import UserWallet from "@/components/UserWallet";
 
-interface WalletTabsProps {
-  balance: number | null;
-  transactions: any[];
-}
-
-const WalletTabs: FC<WalletTabsProps> = ({ balance, transactions }) => {
+const WalletTabs: FC = () => {
   return (
     <Tabs defaultValue="wallet">
       <TabsList className="bg-transparent flex w-full justify-evenly mb-6">
@@ -29,12 +23,7 @@ const WalletTabs: FC<WalletTabsProps> = ({ balance, transactions }) => {
         </TabsTrigger>
       </TabsList>
       <TabsContent value="wallet">
-        <div>
-          <BalanceCard SOLBalance={balance ? balance : 69} />
-          <div className="mt-3">
-            <TransactionTable transactions={transactions} address="" />
-          </div>
-        </div>
+        <UserWallet />
       </TabsContent>
       <TabsContent value="search">
         <WalletSearch />

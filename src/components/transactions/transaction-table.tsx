@@ -10,6 +10,7 @@ import {
   SelectGroup,
 } from "@/components/ui/select";
 import { PublicKey } from "@solana/web3.js";
+import { useWallet } from "@solana/wallet-adapter-react";
 
 interface TransactionTableProps {
   transactions: any[];
@@ -65,6 +66,7 @@ const TransactionTable: FC<TransactionTableProps> = ({
   transactions,
   address,
 }) => {
+  const { publicKey } = useWallet();
   const [data, setData] = useState<any[]>([]);
   const [limit, setLimit] = useState(5);
   const [statusFilter, setStatusFilter] = useState<string>("All");
@@ -79,12 +81,18 @@ const TransactionTable: FC<TransactionTableProps> = ({
 
   useEffect(() => {
     const fetchData = async () => {
-      const publicKey = new PublicKey(address.trim());
+      let key: PublicKey;
 
-      const transformedData = await transformTransactions(
-        transactions,
-        publicKey
-      );
+      if (address.trim() === "" && publicKey) {
+        key = publicKey;
+      } else if (address.trim() !== "") {
+        key = new PublicKey(address);
+      } else {
+        console.error("No public key provided or found.");
+        return;
+      }
+
+      const transformedData = await transformTransactions(transactions, key);
 
       const filteredData = transformedData.filter((tx) =>
         statusFilter === "All" ? true : tx.status === statusFilter
@@ -95,7 +103,7 @@ const TransactionTable: FC<TransactionTableProps> = ({
     };
 
     fetchData();
-  }, [address, limit, statusFilter, transactions]);
+  }, [limit, statusFilter, transactions, publicKey]);
 
   return (
     <div>

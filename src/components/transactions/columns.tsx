@@ -5,10 +5,9 @@ import { ColumnDef } from "@tanstack/react-table";
 export type Transaction = {
   time: string;
   amountSol: number;
-  amountUsd: number;
+  amountUsd: string; // Change to string to account for the '+' or '-' sign
   signature: string;
   status: string;
-  type: string;
 };
 
 export const columns: ColumnDef<Transaction>[] = [
@@ -17,34 +16,17 @@ export const columns: ColumnDef<Transaction>[] = [
     header: "Time",
   },
   {
-    accessorKey: "type",
-    header: "Type",
-    cell: ({ row }) => {
-      return (
-        <span
-          className={`px-2 py-1 rounded-full text-xs font-medium ${
-            row.original.type === "Sent"
-              ? "bg-accent text-accent-foreground"
-              : "bg-primary text-primary-foreground"
-          }`}
-        >
-          {row.original.type}
-        </span>
-      );
-    },
-  },
-  {
     accessorKey: "amountSol",
     header: "Amount (SOL)",
     cell: ({ row }) => {
-      return `${row.original.amountSol.toFixed(5)}`;
+      return `${row.original.amountSol.toFixed(8)}`;
     },
   },
   {
     accessorKey: "amountUsd",
     header: "Txn USD Value",
     cell: ({ row }) => {
-      return `$${row.original.amountUsd.toFixed(2)}`;
+      return row.original.amountUsd;
     },
   },
   {

@@ -32,7 +32,7 @@ const WalletTabs: FC<WalletTabsProps> = ({ balance, transactions }) => {
         <div>
           <BalanceCard SOLBalance={balance ? balance : 69} />
           <div className="mt-3">
-            <TransactionTable transactions={transactions} />
+            <TransactionTable transactions={transactions} address="" />
           </div>
         </div>
       </TabsContent>

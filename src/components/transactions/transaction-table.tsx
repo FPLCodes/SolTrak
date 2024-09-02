@@ -9,9 +9,11 @@ import {
   SelectValue,
   SelectGroup,
 } from "@/components/ui/select";
+import { PublicKey } from "@solana/web3.js";
 
 interface TransactionTableProps {
   transactions: any[];
+  address: string;
 }
 
 const priceCache: { [key: string]: number } = {}; // Cache for historical prices
@@ -38,44 +40,64 @@ const getHistoricalPrice = async (date: string) => {
 const solConversionFactor = 1e9;
 const timeConversionFactor = 1000;
 
-const transformTransactions = async (transactions: any[]) => {
+const transformTransactions = async (
+  transactions: any[],
+  publicKey: PublicKey
+) => {
   const transformedTransactions = await Promise.all(
     transactions.map(async (tx) => {
+      console.log(tx);
       // Format date to DD-MM-YYYY
       const date = new Date(tx.blockTime * timeConversionFactor);
       const formattedDate = `${date.getDate()}-${
         date.getMonth() + 1
       }-${date.getFullYear()}`;
 
-      // Calculate amount in SOL and USD
-      const preBalance = tx.meta.preBalances[0];
-      const postBalance = tx.meta.postBalances[0];
-      const amountSol = (preBalance - postBalance) / solConversionFactor;
-      const amountUsd = (await getHistoricalPrice(formattedDate)) * amountSol;
+      // Find the account index that matches the user's public key
+      const accountIndex = tx.transaction.message.staticAccountKeys.findIndex(
+        (key: string) => {
+          try {
+            return new PublicKey(key).equals(publicKey);
+          } catch (error) {
+            console.error(`Invalid public key: ${key}`, error);
+            return false;
+          }
+        }
+      );
 
-      // Determine transaction type
-      const isSender = preBalance > postBalance;
-      const transactionType = isSender ? "Sent" : "Received";
+      if (accountIndex === -1) {
+        // If the user's public key is not involved in this transaction, skip it
+        return null;
+      }
+
+      // Calculate the difference in balance for the user's account
+      const preBalance = tx.meta.preBalances[accountIndex];
+      const postBalance = tx.meta.postBalances[accountIndex];
+      const balanceChangeSol = (postBalance - preBalance) / solConversionFactor;
+
+      const amountUsd =
+        (await getHistoricalPrice(formattedDate)) * Math.abs(balanceChangeSol);
 
       return {
         time: date.toLocaleString(),
-        amountSol: amountSol,
-        amountUsd: amountUsd,
+        amountSol: balanceChangeSol,
+        amountUsd: balanceChangeSol > 0 ? `+${amountUsd}` : `-${amountUsd}`,
         signature: tx.transaction.signatures[0],
         status: tx.meta.err === null ? "Success" : "Failed",
-        type: transactionType,
       };
     })
   );
 
-  return transformedTransactions;
+  return transformedTransactions.filter((tx) => tx !== null); // Filter out any null transactions
 };
 
-const TransactionTable: FC<TransactionTableProps> = ({ transactions }) => {
+const TransactionTable: FC<TransactionTableProps> = ({
+  transactions,
+  address,
+}) => {
   const [data, setData] = useState<any[]>([]);
   const [limit, setLimit] = useState(5); // State to track the selected limit
   const [statusFilter, setStatusFilter] = useState<string>("All"); // State for status filter
-  const [typeFilter, setTypeFilter] = useState<string>("All"); // State for type filter
 
   const handleLimitChange = (value: string) => {
     setLimit(parseInt(value));
@@ -85,18 +107,17 @@ const TransactionTable: FC<TransactionTableProps> = ({ transactions }) => {
     setStatusFilter(value);
   };
 
-  const handleTypeFilterChange = (value: string) => {
-    setTypeFilter(value);
-  };
-
   useEffect(() => {
     const fetchData = async () => {
-      const transformedData = await transformTransactions(transactions);
+      const publicKey = new PublicKey(address.trim());
 
-      const filteredData = transformedData.filter(
-        (tx) =>
-          (statusFilter === "All" ? true : tx.status === statusFilter) &&
-          (typeFilter === "All" ? true : tx.type === typeFilter)
+      const transformedData = await transformTransactions(
+        transactions,
+        publicKey
+      );
+
+      const filteredData = transformedData.filter((tx) =>
+        statusFilter === "All" ? true : tx.status === statusFilter
       );
 
       // Apply limit after filtering
@@ -105,7 +126,7 @@ const TransactionTable: FC<TransactionTableProps> = ({ transactions }) => {
     };
 
     fetchData();
-  }, [limit, statusFilter, typeFilter, transactions]);
+  }, [address, limit, statusFilter, transactions]);
 
   return (
     <div>
@@ -121,20 +142,6 @@ const TransactionTable: FC<TransactionTableProps> = ({ transactions }) => {
               <SelectItem value="10">10</SelectItem>
               <SelectItem value="15">15</SelectItem>
               <SelectItem value="20">20</SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-
-        <h1 className="self-center">Type</h1>
-        <Select onValueChange={handleTypeFilterChange}>
-          <SelectTrigger className="w-28">
-            <SelectValue placeholder={typeFilter} />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectItem value="All">All</SelectItem>
-              <SelectItem value="Sent">Sent</SelectItem>
-              <SelectItem value="Received">Received</SelectItem>
             </SelectGroup>
           </SelectContent>
         </Select>

@@ -1,5 +1,5 @@
 import { PublicKey, Connection } from "@solana/web3.js";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import BalanceCard from "@/components/balanceCard";
 import TransactionTable from "./transactions/transaction-table";
 import { SearchIcon } from "lucide-react";
@@ -93,7 +93,7 @@ const WalletSearch = () => {
           <div className="mt-4">
             <BalanceCard SOLBalance={balance} />
             <div className="mt-12">
-              <TransactionTable transactions={transactions} />
+              <TransactionTable transactions={transactions} address={address} />
             </div>
           </div>
         )

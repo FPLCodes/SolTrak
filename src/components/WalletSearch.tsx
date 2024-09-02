@@ -1,9 +1,10 @@
 import { PublicKey, Connection } from "@solana/web3.js";
-import { useState, useRef } from "react";
+import { useState } from "react";
 import BalanceCard from "@/components/balanceCard";
 import TransactionTable from "./transactions/transaction-table";
 import { SearchIcon } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import Moralis from "moralis";
 
 const solConversionFactor = 1e9;
 
@@ -16,13 +17,42 @@ const WalletSearch = () => {
   const [address, setAddress] = useState<string>("");
   const [balance, setBalance] = useState<number | null>(null);
   const [transactions, setTransactions] = useState<any[]>([]);
+  const [tokens, setTokens] = useState<any[]>([]);
+  const [nfts, setNfts] = useState<any[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const fetchBalance = async () => {
+  const fetchWalletData = async () => {
     setLoading(true);
+    setError(null);
+
+    // Fetch portfolio data
+    try {
+      await Moralis.start({
+        apiKey: process.env.NEXT_PUBLIC_MORALIS_API_KEY,
+      });
+
+      const response = await Moralis.SolApi.account.getPortfolio({
+        network: "mainnet",
+        address,
+      });
+
+      const data = response.toJSON();
+
+      setTokens(data.tokens);
+      setNfts(data.nfts);
+    } catch (err) {
+      setError("Invalid address or unable to fetch data.");
+      console.error("Error in fetchWalletData:", err);
+    } finally {
+      setLoading(false);
+    }
+
+    // Fetch transaction data
     try {
       const publicKey = new PublicKey(address.trim());
+
+      // Fetch SOL balance
       const balance = await connection.getBalance(publicKey);
       setBalance(balance / solConversionFactor);
 
@@ -62,7 +92,7 @@ const WalletSearch = () => {
           className="p-2 w-full mr-4 rounded-md border border-input bg-transparent placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
         />
         <button
-          onClick={() => fetchBalance()}
+          onClick={() => fetchWalletData()}
           className="button rounded-lg px-2"
         >
           <SearchIcon />
@@ -89,14 +119,52 @@ const WalletSearch = () => {
           </div>
         </div>
       ) : (
-        balance !== null && (
-          <div className="mt-4">
-            <BalanceCard SOLBalance={balance} />
-            <div className="mt-12">
-              <TransactionTable transactions={transactions} address={address} />
-            </div>
+        <div className="mt-4">
+          {balance !== null && <BalanceCard SOLBalance={balance} />}
+          <div className="mt-12">
+            <TransactionTable transactions={transactions} address={address} />
           </div>
-        )
+
+          {tokens.length > 0 && (
+            <div className="mt-12">
+              <h2 className="text-xl font-bold">Tokens</h2>
+              <ul className="mt-4">
+                {tokens.map((token, index) => (
+                  <li key={index} className="mb-2">
+                    <div className="flex justify-between">
+                      <span>
+                        {token.name || "Unknown Token"} ({token.symbol})
+                      </span>
+                      <span>
+                        {token.amount} {token.symbol}
+                      </span>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {nfts.length > 0 && (
+            <div className="mt-12">
+              <h2 className="text-xl font-bold">NFTs</h2>
+              <ul className="mt-4">
+                {nfts.map((nft, index) => (
+                  <li key={index} className="mb-2">
+                    <div className="flex justify-between">
+                      <span>
+                        {nft.name || "Unknown NFT"} ({nft.symbol})
+                      </span>
+                      <span>
+                        {nft.amount} {nft.symbol}
+                      </span>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
       )}
     </div>
   );

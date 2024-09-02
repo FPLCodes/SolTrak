@@ -107,35 +107,38 @@ const TransactionTable: FC<TransactionTableProps> = ({
 
   return (
     <div>
-      <div className="flex space-x-3 mb-3 justify-end">
-        <h1 className="self-center">Limit</h1>
-        <Select onValueChange={handleLimitChange}>
-          <SelectTrigger className="w-16">
-            <SelectValue placeholder={limit.toString()} />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectItem value="5">5</SelectItem>
-              <SelectItem value="10">10</SelectItem>
-              <SelectItem value="15">15</SelectItem>
-              <SelectItem value="20">20</SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+      <div className="flex justify-between items-end">
+        <h1 className="text-sm mb-3 text-muted-foreground">Transactions</h1>
+        <div className="flex space-x-3 mb-3 justify-end">
+          <h1 className="self-center">Limit</h1>
+          <Select onValueChange={handleLimitChange}>
+            <SelectTrigger className="w-16">
+              <SelectValue placeholder={limit.toString()} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem value="5">5</SelectItem>
+                <SelectItem value="10">10</SelectItem>
+                <SelectItem value="15">15</SelectItem>
+                <SelectItem value="20">20</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
 
-        <h1 className="self-center">Status</h1>
-        <Select onValueChange={handleStatusFilterChange}>
-          <SelectTrigger className="w-24">
-            <SelectValue placeholder={statusFilter} />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectItem value="All">All</SelectItem>
-              <SelectItem value="Success">Success</SelectItem>
-              <SelectItem value="Failed">Failed</SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+          <h1 className="self-center">Status</h1>
+          <Select onValueChange={handleStatusFilterChange}>
+            <SelectTrigger className="w-24">
+              <SelectValue placeholder={statusFilter} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem value="All">All</SelectItem>
+                <SelectItem value="Success">Success</SelectItem>
+                <SelectItem value="Failed">Failed</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
       <DataTable columns={columns} data={data} />
     </div>

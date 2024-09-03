@@ -9,9 +9,9 @@ import TokensTable from "./tokens/tokens-table";
 
 const solConversionFactor = 1e9;
 
-// Replace <API KEY> with your actual Alchemy API key
 const connection = new Connection(
-  "https://solana-mainnet.g.alchemy.com/v2/Gm-xaejXqLMg4DNz5NaM1_B6Q81Db5SV"
+  "https://solana-mainnet.g.alchemy.com/v2/" +
+    process.env.NEXT_PUBLIC_ALCHEMY_API_KEY
 );
 
 Moralis.start({

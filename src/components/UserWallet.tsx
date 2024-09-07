@@ -6,6 +6,7 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import TokensTable from "./tokens/tokens-table";
 import LineChart from "./LineChart";
 import PieChart from "./PieChart";
+import Image from "next/image";
 
 import {
   Card,
@@ -81,7 +82,7 @@ const UserWallet = () => {
           <PieChart tokens={tokens} />
         </div>
 
-        {historicalData.length > 0 && (
+        {historicalData.length > 0 ? (
           <Card className="w-full">
             <CardHeader>
               <CardTitle>Balance Over Time</CardTitle>
@@ -89,6 +90,24 @@ const UserWallet = () => {
             </CardHeader>
             <CardContent className="flex w-full mt-6">
               <LineChart data={historicalData} />
+            </CardContent>
+          </Card>
+        ) : (
+          <Card className="w-full">
+            <CardHeader>
+              <CardTitle>Balance Over Time</CardTitle>
+              <CardDescription>No historical data available</CardDescription>
+            </CardHeader>
+            <CardContent className="flex flex-col items-center w-full h-full">
+              <Image
+                src="/no-data-illustration.png"
+                alt="No Data"
+                width={450}
+                height={450}
+              />
+              <p className="text-muted mt-4">
+                No historical data available for this wallet
+              </p>
             </CardContent>
           </Card>
         )}

@@ -3,6 +3,7 @@ import "@solana/wallet-adapter-react-ui/styles.css";
 import { Inter as FontSans } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import WalletContext from "../components/WalletContext";
+import WalletConnection from "@/components/WalletConnection"; // Import the navbar
 
 import { cn } from "@/lib/utils";
 
@@ -35,7 +36,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <WalletContext>{children}</WalletContext>
+          <WalletContext>
+            <WalletConnection /> {/* This adds your navbar */}
+            <main>{children}</main> {/* Rest of the content */}
+          </WalletContext>
         </ThemeProvider>
       </body>
     </html>

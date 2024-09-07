@@ -1,9 +1,7 @@
-import WalletConnection from "../components/WalletConnection";
+// Import the redirect function from Next.js
+import { redirect } from "next/navigation";
 
-export default function Home() {
-  return (
-    <div className="px-20 py-12">
-      <WalletConnection />
-    </div>
-  );
+export default function HomePage() {
+  // Automatically redirect to /your-wallet
+  redirect("/your-wallet");
 }

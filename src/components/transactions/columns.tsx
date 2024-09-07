@@ -12,7 +12,7 @@ export type Transaction = {
 export const columns: ColumnDef<Transaction>[] = [
   {
     accessorKey: "time",
-    header: "Time",
+    header: "Time (UTC)",
   },
   {
     accessorKey: "amountSol",

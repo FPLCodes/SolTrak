@@ -3,6 +3,7 @@ import BalanceCard from "@/components/balanceCard";
 import TransactionTable from "@/components/transactions/transaction-table";
 import useWalletData from "@/lib/useWalletData";
 import { useWallet } from "@solana/wallet-adapter-react";
+import TokensTable from "./tokens/tokens-table";
 
 const UserWallet = () => {
   const { publicKey } = useWallet();
@@ -23,22 +24,7 @@ const UserWallet = () => {
       <BalanceCard SOLBalance={balance == null ? 0 : balance} />
       <TransactionTable transactions={transactions} address="" />
       <div className="mt-4">
-        <h2 className="text-xl font-bold">Tokens</h2>
-        <ul>
-          {tokens.map((token) => (
-            <li key={token.mint}>
-              {token.amount} {token.mint}
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div className="mt-4">
-        <h2 className="text-xl font-bold">NFTs</h2>
-        <ul>
-          {nfts.map((nft) => (
-            <li key={nft.mintAddress.toBase58()}>{nft.name}</li>
-          ))}
-        </ul>
+        <TokensTable tokens={tokens} />
       </div>
     </div>
   );

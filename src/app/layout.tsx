@@ -38,7 +38,10 @@ export default function RootLayout({
         >
           <WalletContext>
             <WalletConnection /> {/* This adds your navbar */}
-            <main>{children}</main> {/* Rest of the content */}
+            <main className="mx-auto w-11/12 md:w-3/4 lg:w-2/3 my-6">
+              {children}
+            </main>{" "}
+            {/* Rest of the content */}
           </WalletContext>
         </ThemeProvider>
       </body>

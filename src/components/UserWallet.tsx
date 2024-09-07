@@ -106,11 +106,11 @@ const UserWallet = () => {
             <CardContent className="flex flex-col items-center w-full h-full">
               <Image
                 src="/no-data-illustration.png"
-                alt="No Data"
+                alt="No historical data available"
                 width={450}
                 height={450}
               />
-              <p className="text-muted mt-4">
+              <p className="text-muted mt-4 text-sm">
                 No historical data available for this wallet
               </p>
             </CardContent>

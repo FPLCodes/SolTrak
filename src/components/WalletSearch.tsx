@@ -8,6 +8,7 @@ import Moralis from "moralis";
 import TokensTable from "./tokens/tokens-table";
 import PieChart from "./PieChart";
 import LineChart from "./LineChart";
+import Image from "next/image";
 
 import {
   Card,
@@ -177,7 +178,7 @@ const WalletSearch = () => {
                 <BalanceCard SOLBalance={balance} />
                 <PieChart tokens={tokens} />
               </div>
-              {historicalData.length > 0 && (
+              {historicalData.length > 0 ? (
                 <Card className="w-full">
                   <CardHeader>
                     <CardTitle>Balance Over Time</CardTitle>
@@ -187,6 +188,26 @@ const WalletSearch = () => {
                   </CardHeader>
                   <CardContent className="flex w-full mt-6">
                     <LineChart data={historicalData} />
+                  </CardContent>
+                </Card>
+              ) : (
+                <Card className="w-full">
+                  <CardHeader>
+                    <CardTitle>Balance Over Time</CardTitle>
+                    <CardDescription>
+                      No historical data available
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex flex-col items-center w-full h-full">
+                    <Image
+                      src="/no-data-illustration.png"
+                      alt="No historical data available"
+                      width={450}
+                      height={450}
+                    />
+                    <p className="text-muted mt-4 text-sm">
+                      No historical data available for this wallet
+                    </p>
                   </CardContent>
                 </Card>
               )}

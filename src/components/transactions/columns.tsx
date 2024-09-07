@@ -32,7 +32,7 @@ export const columns: ColumnDef<Transaction>[] = [
           rel="noreferrer"
           className="hover:text-primary text-accent transition-all"
         >
-          {row.original.signature.substring(0, 5)}...
+          {row.original.signature.substring(0, 9)}...
         </a>
       );
     },

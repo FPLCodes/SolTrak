@@ -55,7 +55,7 @@ const WalletSearch = () => {
 
       // Fetch recent transaction signatures
       const signatures = await connection.getSignaturesForAddress(publicKey, {
-        limit: 5,
+        limit: 20,
       });
 
       const transactionDetailsPromises = signatures.map(

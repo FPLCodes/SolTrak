@@ -38,9 +38,7 @@ export default function RootLayout({
         >
           <WalletContext>
             <WalletConnection />
-            <main className="mx-auto w-11/12 md:w-3/4 lg:w-2/3 max-w-screen-xl my-8">
-              {children}
-            </main>
+            <main>{children}</main>
           </WalletContext>
         </ThemeProvider>
       </body>

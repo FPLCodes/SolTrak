@@ -1,14 +1,10 @@
-"use client";
-
-import React from "react";
+import WalletContext from "@/components/WalletContext";
 import UserWallet from "@/components/UserWallet";
 
-const YourWalletPage = () => {
+export default function YourWalletPage() {
   return (
-    <div>
+    <WalletContext>
       <UserWallet />
-    </div>
+    </WalletContext>
   );
-};
-
-export default YourWalletPage;
+}

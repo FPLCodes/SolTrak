@@ -80,7 +80,7 @@ const UserWallet = () => {
 
   // If the wallet is connected, display the wallet data.
   return (
-    <div className="mx-auto w-full">
+    <div className="text-2xl mx-auto w-11/12 md:w-3/4 lg:w-2/3 my-8">
       <div className="flex space-x-4">
         <div className="flex flex-col space-y-4">
           <BalanceCard SOLBalance={balance == null ? 0 : balance} />

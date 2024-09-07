@@ -59,7 +59,7 @@ const PieChart = ({ tokens }: { tokens: Array<any> }) => {
       </CardHeader>
       <CardContent className="flex justify-center items-center">
         {tokens.length === 0 ? (
-          <p className="text-muted-foreground mt-20">No tokens found</p>
+          <p className="text-muted mt-20 text-sm">No tokens found</p>
         ) : (
           <div className="w-[240px] h-[240px]">
             <Pie data={data} options={options} />

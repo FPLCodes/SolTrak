@@ -132,7 +132,7 @@ const WalletSearch = () => {
   };
 
   return (
-    <div className="mx-auto">
+    <div className="mx-auto w-11/12 md:w-3/4 lg:w-2/3 my-8">
       <div className="flex justify-between mt-4">
         <input
           type="text"

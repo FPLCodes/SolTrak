@@ -132,26 +132,6 @@ const WalletSearch = () => {
                 <TokensTable tokens={tokens} />
               </div>
             )}
-
-            {nfts.length > 0 && (
-              <div className="mt-12">
-                <h2 className="text-xl font-bold">NFTs</h2>
-                <ul className="mt-4">
-                  {nfts.map((nft, index) => (
-                    <li key={index} className="mb-2">
-                      <div className="flex justify-between">
-                        <span>
-                          {nft.name || "Unknown NFT"} ({nft.symbol})
-                        </span>
-                        <span>
-                          {nft.amount} {nft.symbol}
-                        </span>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
           </div>
         )
       )}

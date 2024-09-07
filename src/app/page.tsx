@@ -1,4 +1,5 @@
 import WalletConnection from "../components/WalletConnection";
+import Moralis from "moralis";
 
 export default function Home() {
   return (

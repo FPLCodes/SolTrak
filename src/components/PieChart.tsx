@@ -52,13 +52,19 @@ const PieChart = ({ tokens }: { tokens: Array<any> }) => {
       <CardHeader>
         <CardTitle className="text-white">Token Distribution</CardTitle>
         <CardDescription className="text-muted-foreground">
-          Distribution of tokens in the wallet
+          {tokens.length === 0
+            ? "No tokens found in the wallet"
+            : "Distribution of tokens in the wallet"}
         </CardDescription>
       </CardHeader>
       <CardContent className="flex justify-center items-center">
-        <div className="w-[240px] h-[240px]">
-          <Pie data={data} options={options} />
-        </div>
+        {tokens.length === 0 ? (
+          <p className="text-muted-foreground mt-20">No tokens found</p>
+        ) : (
+          <div className="w-[240px] h-[240px]">
+            <Pie data={data} options={options} />
+          </div>
+        )}
       </CardContent>
     </Card>
   );

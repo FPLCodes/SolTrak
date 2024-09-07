@@ -50,7 +50,7 @@ export default function BalanceCard({ SOLBalance }: { SOLBalance: number }) {
   }, []);
 
   return (
-    <Card className={cn("w-[350px] card bg-primary rounded-xl")}>
+    <Card className={cn("w-[360px] h-fit card bg-primary rounded-xl")}>
       <CardHeader>
         <CardTitle>Balance</CardTitle>
         <CardDescription>Current balance in your wallet</CardDescription>

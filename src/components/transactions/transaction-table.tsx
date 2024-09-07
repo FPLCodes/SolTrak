@@ -20,7 +20,7 @@ interface TransactionTableProps {
 const solConversionFactor = 1e9;
 const timeConversionFactor = 1000;
 
-const transformTransactions = async (
+export const transformTransactions = async (
   transactions: any[],
   publicKey: PublicKey
 ) => {
@@ -121,6 +121,7 @@ const TransactionTable: FC<TransactionTableProps> = ({
                 <SelectItem value="10">10</SelectItem>
                 <SelectItem value="15">15</SelectItem>
                 <SelectItem value="20">20</SelectItem>
+                <SelectItem value="30">30</SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>

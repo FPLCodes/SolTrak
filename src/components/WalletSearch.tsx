@@ -9,6 +9,14 @@ import TokensTable from "./tokens/tokens-table";
 import PieChart from "./PieChart";
 import LineChart from "./LineChart";
 
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+
 const solConversionFactor = 1e9;
 
 const connection = new Connection(
@@ -57,7 +65,7 @@ const WalletSearch = () => {
 
       // Fetch recent transaction signatures
       const signatures = await connection.getSignaturesForAddress(publicKey, {
-        limit: 20,
+        limit: 30,
       });
 
       const transactionDetailsPromises = signatures.map(
@@ -157,19 +165,31 @@ const WalletSearch = () => {
       ) : (
         balance !== null &&
         tokens !== null && (
-          <div className="mt-4">
+          <div className="mt-4 w-full">
             <div className="flex space-x-4">
-              <BalanceCard SOLBalance={balance} />
-              <PieChart tokens={tokens} />
-              {tokens.length > 0 && <TokensTable tokens={tokens} />}
-            </div>
-            {historicalData.length > 0 && (
-              <div className="mt-4">
-                <LineChart data={historicalData} />
+              <div className="flex flex-col space-y-4">
+                <BalanceCard SOLBalance={balance} />
+                <PieChart tokens={tokens} />
               </div>
-            )}
+              {historicalData.length > 0 && (
+                <Card className="w-full">
+                  <CardHeader>
+                    <CardTitle>Balance Over Time</CardTitle>
+                    <CardDescription>
+                      Balance of the wallet over time
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex w-full mt-6">
+                    <LineChart data={historicalData} />
+                  </CardContent>
+                </Card>
+              )}
+            </div>
             <div className="mt-4">
               <TransactionTable transactions={transactions} address={address} />
+            </div>
+            <div className="flex space-x-4 mt-4">
+              {tokens.length > 0 && <TokensTable tokens={tokens} />}
             </div>
           </div>
         )

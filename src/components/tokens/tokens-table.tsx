@@ -16,7 +16,12 @@ const TokensTable: FC<TokensTableProps> = ({ tokens }) => {
     amount: token.amount,
   }));
 
-  return <DataTable columns={tokenColumns} data={data} />;
+  return (
+    <div className="w-full">
+      <h1 className="text-sm mb-3 text-muted-foreground">Token Holdings</h1>
+      <DataTable columns={tokenColumns} data={data} />
+    </div>
+  );
 };
 
 export default TokensTable;

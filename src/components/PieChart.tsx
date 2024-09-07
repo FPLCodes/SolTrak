@@ -48,11 +48,11 @@ const PieChart = ({ tokens }: { tokens: Array<any> }) => {
   };
 
   return (
-    <Card className={cn("w-[300px] h-[360px] text-primary-foreground")}>
+    <Card className={cn("w-[360px] h-[360px] text-primary-foreground")}>
       <CardHeader>
         <CardTitle className="text-white">Token Distribution</CardTitle>
         <CardDescription className="text-muted-foreground">
-          Distribution of tokens in your wallet
+          Distribution of tokens in the wallet
         </CardDescription>
       </CardHeader>
       <CardContent className="flex justify-center items-center">

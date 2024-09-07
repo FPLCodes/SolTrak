@@ -19,7 +19,7 @@ export const tokenColumns: ColumnDef<Token>[] = [
   },
   {
     accessorKey: "mint",
-    header: "Mint Address",
+    header: "Mint",
     cell: ({ row }) => {
       return (
         <a

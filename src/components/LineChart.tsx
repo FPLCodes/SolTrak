@@ -9,7 +9,6 @@ import {
   Tooltip,
   Title,
 } from "chart.js";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"; // ShadCN Card components
 
 ChartJS.register(
   LineElement,
@@ -42,7 +41,7 @@ const LineChart = ({
         label: "Balance Over Time",
         data: data.map((point) => point.balance),
         fill: false,
-        borderColor: "#36A2EB",
+        borderColor: "hsl(181, 87%, 46%)",
         tension: 0.1,
       },
     ],
@@ -72,13 +71,9 @@ const LineChart = ({
   };
 
   return (
-    <Card className="w-full">
-      <CardContent>
-        <div style={{ height: "300px" }}>
-          <Line data={chartData} options={options} />
-        </div>
-      </CardContent>
-    </Card>
+    <div className="h-[350px] w-full">
+      <Line data={chartData} options={options} />
+    </div>
   );
 };
 

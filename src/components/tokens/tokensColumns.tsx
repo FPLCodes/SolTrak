@@ -1,15 +1,11 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import Image from "next/image";
 
 export type Token = {
-  associatedTokenAddress: string;
-  mint: string;
-  amount: string;
-  decimals: string;
   name: string;
   symbol: string;
+  amount: string;
 };
 
 export const tokenColumns: ColumnDef<Token>[] = [
@@ -17,7 +13,16 @@ export const tokenColumns: ColumnDef<Token>[] = [
     accessorKey: "name",
     header: "Token",
     cell: ({ row }) => {
-      return <span className="text-primary">{row.original.name}</span>;
+      return (
+        <a
+          className="text-primary"
+          href={`https://solscan.io/token/${row.original.symbol}`}
+          target="_blank"
+          rel="noreferrer"
+        >
+          {row.original.name}
+        </a>
+      );
     },
   },
   {

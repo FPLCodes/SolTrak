@@ -5,23 +5,17 @@ import { DataTable } from "./data-table";
 import { tokenColumns } from "./tokensColumns";
 
 interface TokensTableProps {
-  tokens: {
-    associatedTokenAddress: string;
-    mint: string;
-    amount: string;
-    decimals: string;
-    name: string;
-    symbol: string;
-  }[];
+  tokens: any[];
 }
 
 const TokensTable: FC<TokensTableProps> = ({ tokens }) => {
-  return (
-    <div className="mt-8">
-      <h2 className="text-sm text-muted-foreground mb-2">Tokens</h2>
-      <DataTable columns={tokenColumns} data={tokens} />
-    </div>
-  );
+  const data = tokens.map((token) => ({
+    name: token.name,
+    symbol: token.symbol,
+    amount: token.amount,
+  }));
+
+  return <DataTable columns={tokenColumns} data={data} />;
 };
 
 export default TokensTable;

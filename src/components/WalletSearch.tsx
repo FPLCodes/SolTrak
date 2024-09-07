@@ -42,12 +42,9 @@ const WalletSearch = () => {
 
       setTokens(data.tokens);
       setNfts(data.nfts);
-      console.log(data.nfts);
     } catch (err) {
       setError("Invalid address or unable to fetch data.");
       console.error("Error in fetchWalletData:", err);
-    } finally {
-      setLoading(false);
     }
 
     // Fetch transaction data
@@ -130,7 +127,11 @@ const WalletSearch = () => {
               <TransactionTable transactions={transactions} address={address} />
             </div>
 
-            {tokens.length > 0 && <TokensTable tokens={tokens} />}
+            {tokens.length > 0 && (
+              <div className="mt-4">
+                <TokensTable tokens={tokens} />
+              </div>
+            )}
 
             {nfts.length > 0 && (
               <div className="mt-12">

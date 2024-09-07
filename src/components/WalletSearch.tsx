@@ -7,7 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import Moralis from "moralis";
 import TokensTable from "./tokens/tokens-table";
 import PieChart from "./PieChart";
-import LineChart from "./LineChart"; // Import the LineChart component
+import LineChart from "./LineChart";
 
 const solConversionFactor = 1e9;
 
@@ -158,24 +158,19 @@ const WalletSearch = () => {
         balance !== null &&
         tokens !== null && (
           <div className="mt-4">
-            <div className="flex justify-between">
+            <div className="flex space-x-4">
               <BalanceCard SOLBalance={balance} />
               <PieChart tokens={tokens} />
+              {tokens.length > 0 && <TokensTable tokens={tokens} />}
             </div>
             {historicalData.length > 0 && (
               <div className="mt-4">
                 <LineChart data={historicalData} />
               </div>
             )}
-            <div className="mt-12">
+            <div className="mt-4">
               <TransactionTable transactions={transactions} address={address} />
             </div>
-
-            {tokens.length > 0 && (
-              <div className="mt-4">
-                <TokensTable tokens={tokens} />
-              </div>
-            )}
           </div>
         )
       )}

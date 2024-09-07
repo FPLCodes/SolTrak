@@ -48,7 +48,7 @@ const PieChart = ({ tokens }: { tokens: Array<any> }) => {
   };
 
   return (
-    <Card className={cn("w-[320px] h-[380px] text-primary-foreground")}>
+    <Card className={cn("w-[300px] h-[360px] text-primary-foreground")}>
       <CardHeader>
         <CardTitle className="text-white">Token Distribution</CardTitle>
         <CardDescription className="text-muted-foreground">
@@ -56,7 +56,7 @@ const PieChart = ({ tokens }: { tokens: Array<any> }) => {
         </CardDescription>
       </CardHeader>
       <CardContent className="flex justify-center items-center">
-        <div className="w-[260px] h-[260px]">
+        <div className="w-[240px] h-[240px]">
           <Pie data={data} options={options} />
         </div>
       </CardContent>

@@ -75,6 +75,30 @@
   }
 }
 
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(100, 100, 100, 0.3);
+  border-radius: 10px;
+  border: 2px solid transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(100, 100, 100, 0.5);
+}
+
+/* For Firefox */
+.custom-scrollbar {
+  scrollbar-color: rgba(100, 100, 100, 0.3) transparent;
+  scrollbar-width: thin;
+}
+
 .bg-gradient {
   background: var(--gradient);
 }

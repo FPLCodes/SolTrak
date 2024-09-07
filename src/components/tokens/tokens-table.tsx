@@ -11,6 +11,7 @@ interface TokensTableProps {
 const TokensTable: FC<TokensTableProps> = ({ tokens }) => {
   const data = tokens.map((token) => ({
     name: token.name,
+    mint: token.mint,
     symbol: token.symbol,
     amount: token.amount,
   }));

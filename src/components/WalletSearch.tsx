@@ -23,7 +23,6 @@ const WalletSearch = () => {
   const [balance, setBalance] = useState<number | null>(null);
   const [transactions, setTransactions] = useState<any[]>([]);
   const [tokens, setTokens] = useState<any[]>([]);
-  const [nfts, setNfts] = useState<any[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -33,15 +32,14 @@ const WalletSearch = () => {
 
     // Fetch portfolio data
     try {
-      const response = await Moralis.SolApi.account.getPortfolio({
+      const response = await Moralis.SolApi.account.getSPL({
         network: "mainnet",
         address,
       });
 
       const data = response.toJSON();
 
-      setTokens(data.tokens);
-      setNfts(data.nfts);
+      setTokens(data);
     } catch (err) {
       setError("Invalid address or unable to fetch data.");
       console.error("Error in fetchWalletData:", err);
@@ -119,8 +117,7 @@ const WalletSearch = () => {
         </div>
       ) : (
         balance !== null &&
-        tokens !== null &&
-        nfts !== null && (
+        tokens !== null && (
           <div className="mt-4">
             <BalanceCard SOLBalance={balance} />
             <div className="mt-12">

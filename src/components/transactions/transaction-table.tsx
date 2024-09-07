@@ -106,7 +106,7 @@ const TransactionTable: FC<TransactionTableProps> = ({
   }, [limit, statusFilter, transactions, publicKey]);
 
   return (
-    <div>
+    <div className="mt-4">
       <div className="flex justify-between items-end">
         <h1 className="text-sm mb-3 text-muted-foreground">Transactions</h1>
         <div className="flex space-x-3 mb-3 justify-end">

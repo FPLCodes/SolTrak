@@ -37,11 +37,10 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <WalletContext>
-            <WalletConnection /> {/* This adds your navbar */}
-            <main className="mx-auto w-11/12 md:w-3/4 lg:w-2/3 my-6">
+            <WalletConnection />
+            <main className="mx-auto w-11/12 md:w-3/4 lg:w-2/3 max-w-screen-xl my-8">
               {children}
-            </main>{" "}
-            {/* Rest of the content */}
+            </main>
           </WalletContext>
         </ThemeProvider>
       </body>

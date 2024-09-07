@@ -17,8 +17,8 @@ const WalletConnection: FC = () => {
   }
 
   return (
-    <header className="sticky py-2 top-0 z-50 w-full border-b border-border/40 bg-card backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-lg">
-      <div className="container flex h-14 max-w-screen-2xl items-center">
+    <header className="sticky py-2 top-0 z-50 w-full border-b border-border/40 bg-card shadow-lg">
+      <div className="container flex h-14 max-w-screen-xl items-center">
         <div className="mr-4 flex">
           <Link className="mr-6 flex items-center space-x-2" href="/">
             <span className="hidden font-bold sm:inline-block">SolTrak</span>

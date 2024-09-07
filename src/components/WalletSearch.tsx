@@ -96,8 +96,14 @@ const WalletSearch = () => {
   };
 
   // Helper function to calculate historical balances
-  const calculateHistoricalBalances = (transactions, currentBalance) => {
-    const balanceHistory = [];
+  const calculateHistoricalBalances = (
+    transactions: any[],
+    currentBalance: number
+  ) => {
+    const balanceHistory: {
+      time: string; // Convert blockTime to human-readable date
+      balance: number;
+    }[] = [];
     let runningBalance = currentBalance;
 
     // Sort transactions by block time

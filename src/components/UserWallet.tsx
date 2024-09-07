@@ -1,13 +1,67 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import BalanceCard from "@/components/balanceCard";
 import TransactionTable from "@/components/transactions/transaction-table";
 import useWalletData from "@/lib/useWalletData";
 import { useWallet } from "@solana/wallet-adapter-react";
 import TokensTable from "./tokens/tokens-table";
+import LineChart from "./LineChart";
+import PieChart from "./PieChart";
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+
+// Helper function to calculate historical balances
+const calculateHistoricalBalances = (
+  transactions: any[],
+  currentBalance: number,
+  solConversionFactor: number
+) => {
+  const balanceHistory: { time: string; balance: number }[] = [];
+  let runningBalance = currentBalance;
+
+  const sortedTransactions = transactions
+    .filter((tx) => tx !== null)
+    .sort((a, b) => b.blockTime - a.blockTime); // Sort descending (newest to oldest)
+
+  sortedTransactions.forEach((transaction) => {
+    const { meta, blockTime } = transaction;
+    const preBalance = meta.preBalances[0] / solConversionFactor;
+    const postBalance = meta.postBalances[0] / solConversionFactor;
+
+    const balanceChange = postBalance - preBalance;
+
+    runningBalance -= balanceChange;
+    balanceHistory.push({
+      time: new Date(blockTime * 1000).toISOString(),
+      balance: runningBalance,
+    });
+  });
+
+  return balanceHistory.reverse();
+};
+
+const solConversionFactor = 1e9;
 
 const UserWallet = () => {
   const { publicKey } = useWallet();
   const { balance, transactions, tokens, nfts } = useWalletData();
+  const [historicalData, setHistoricalData] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (transactions && balance !== null) {
+      const historicalBalances = calculateHistoricalBalances(
+        transactions,
+        balance,
+        solConversionFactor
+      );
+      setHistoricalData(historicalBalances);
+    }
+  }, [transactions, balance]);
 
   // If the user has not connected their wallet, display a message.
   if (!publicKey) {
@@ -20,10 +74,34 @@ const UserWallet = () => {
 
   // If the wallet is connected, display the wallet data.
   return (
-    <div className="mx-auto">
-      <BalanceCard SOLBalance={balance == null ? 0 : balance} />
-      <TransactionTable transactions={transactions} address="" />
+    <div className="mx-auto w-full">
+      <div className="flex space-x-4">
+        <div className="flex flex-col space-y-4">
+          <BalanceCard SOLBalance={balance == null ? 0 : balance} />
+          <PieChart tokens={tokens} />
+        </div>
+
+        {historicalData.length > 0 && (
+          <Card className="w-full">
+            <CardHeader>
+              <CardTitle>Balance Over Time</CardTitle>
+              <CardDescription>Balance of the wallet over time</CardDescription>
+            </CardHeader>
+            <CardContent className="flex w-full mt-6">
+              <LineChart data={historicalData} />
+            </CardContent>
+          </Card>
+        )}
+      </div>
+
       <div className="mt-4">
+        <TransactionTable
+          transactions={transactions}
+          address={publicKey.toString()}
+        />
+      </div>
+
+      <div className="flex space-x-4 mt-4">
         <TokensTable tokens={tokens} />
       </div>
     </div>

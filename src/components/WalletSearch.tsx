@@ -6,6 +6,7 @@ import { SearchIcon } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import Moralis from "moralis";
 import TokensTable from "./tokens/tokens-table";
+import PieChart from "./PieChart"; // Import the PieChart component
 
 const solConversionFactor = 1e9;
 
@@ -119,7 +120,10 @@ const WalletSearch = () => {
         balance !== null &&
         tokens !== null && (
           <div className="mt-4">
-            <BalanceCard SOLBalance={balance} />
+            <div className="flex justify-between">
+              <BalanceCard SOLBalance={balance} />
+              <PieChart tokens={tokens} />
+            </div>
             <div className="mt-12">
               <TransactionTable transactions={transactions} address={address} />
             </div>

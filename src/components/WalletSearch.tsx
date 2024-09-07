@@ -6,7 +6,8 @@ import { SearchIcon } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import Moralis from "moralis";
 import TokensTable from "./tokens/tokens-table";
-import PieChart from "./PieChart"; // Import the PieChart component
+import PieChart from "./PieChart";
+import LineChart from "./LineChart"; // Import the LineChart component
 
 const solConversionFactor = 1e9;
 
@@ -24,6 +25,7 @@ const WalletSearch = () => {
   const [balance, setBalance] = useState<number | null>(null);
   const [transactions, setTransactions] = useState<any[]>([]);
   const [tokens, setTokens] = useState<any[]>([]);
+  const [historicalData, setHistoricalData] = useState<any[]>([]); // State for historical balance data
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -39,14 +41,13 @@ const WalletSearch = () => {
       });
 
       const data = response.toJSON();
-
       setTokens(data);
     } catch (err) {
       setError("Invalid address or unable to fetch data.");
       console.error("Error in fetchWalletData:", err);
     }
 
-    // Fetch transaction data
+    // Fetch transaction and balance history
     try {
       const publicKey = new PublicKey(address.trim());
 
@@ -71,12 +72,49 @@ const WalletSearch = () => {
 
       const transactions = await Promise.all(transactionDetailsPromises);
       setTransactions(transactions);
+
+      // Calculate historical balance based on transactions
+      const historicalBalances = calculateHistoricalBalances(
+        transactions,
+        balance / solConversionFactor
+      );
+      setHistoricalData(historicalBalances); // Set the historical data for chart
     } catch (err) {
       setError("Invalid address or unable to fetch data.");
       console.error("Error in fetchBalance:", err);
     } finally {
       setLoading(false);
     }
+  };
+
+  // Helper function to calculate historical balances
+  const calculateHistoricalBalances = (transactions, currentBalance) => {
+    const balanceHistory = [];
+    let runningBalance = currentBalance;
+
+    // Sort transactions by block time
+    const sortedTransactions = transactions
+      .filter((tx) => tx !== null)
+      .sort((a, b) => b.blockTime - a.blockTime); // Sort descending (newest to oldest)
+
+    // Calculate balance changes
+    sortedTransactions.forEach((transaction) => {
+      const { meta, blockTime } = transaction;
+
+      const preBalance = meta.preBalances[0] / solConversionFactor;
+      const postBalance = meta.postBalances[0] / solConversionFactor;
+
+      const balanceChange = postBalance - preBalance;
+
+      // Save balance at each block time
+      runningBalance -= balanceChange;
+      balanceHistory.push({
+        time: new Date(blockTime * 1000).toISOString(), // Convert blockTime to human-readable date
+        balance: runningBalance,
+      });
+    });
+
+    return balanceHistory.reverse(); // Return in chronological order
   };
 
   return (
@@ -124,6 +162,11 @@ const WalletSearch = () => {
               <BalanceCard SOLBalance={balance} />
               <PieChart tokens={tokens} />
             </div>
+            {historicalData.length > 0 && (
+              <div className="mt-4">
+                <LineChart data={historicalData} />
+              </div>
+            )}
             <div className="mt-12">
               <TransactionTable transactions={transactions} address={address} />
             </div>

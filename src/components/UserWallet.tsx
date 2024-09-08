@@ -53,7 +53,7 @@ const solConversionFactor = 1e9;
 
 const UserWallet = () => {
   const { publicKey } = useWallet();
-  const { balance, transactions, tokens, nfts } = useWalletData();
+  const { balance, transactions, tokens } = useWalletData();
   const [historicalData, setHistoricalData] = useState<any[]>([]);
 
   useEffect(() => {

@@ -1,5 +1,5 @@
 import { PublicKey, Connection } from "@solana/web3.js";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BalanceCard from "@/components/balanceCard";
 import TransactionTable from "./transactions/transaction-table";
 import { SearchIcon } from "lucide-react";
@@ -20,15 +20,6 @@ import {
 
 const solConversionFactor = 1e9;
 
-const connection = new Connection(
-  "https://solana-mainnet.g.alchemy.com/v2/" +
-    process.env.NEXT_PUBLIC_ALCHEMY_API_KEY
-);
-
-Moralis.start({
-  apiKey: process.env.NEXT_PUBLIC_MORALIS_API_KEY,
-});
-
 const WalletSearch = () => {
   const [address, setAddress] = useState<string>("");
   const [balance, setBalance] = useState<number | null>(null);
@@ -37,8 +28,28 @@ const WalletSearch = () => {
   const [historicalData, setHistoricalData] = useState<any[]>([]); // State for historical balance data
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [connection, setConnection] = useState<Connection | null>(null);
+
+  useEffect(() => {
+    // Initialize the connection and Moralis API when the component mounts
+    const initConnectionAndMoralis = () => {
+      const conn = new Connection(
+        "https://solana-mainnet.g.alchemy.com/v2/" +
+          process.env.NEXT_PUBLIC_ALCHEMY_API_KEY
+      );
+      setConnection(conn);
+
+      Moralis.start({
+        apiKey: process.env.NEXT_PUBLIC_MORALIS_API_KEY,
+      });
+    };
+
+    initConnectionAndMoralis();
+  }, []);
 
   const fetchWalletData = async () => {
+    if (!connection) return; // Ensure connection is available before fetching
+
     setLoading(true);
     setError(null);
 

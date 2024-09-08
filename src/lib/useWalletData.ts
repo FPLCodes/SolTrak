@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { TOKEN_PROGRAM_ID } from "@solana/spl-token";
-import { Metaplex, walletAdapterIdentity } from "@metaplex-foundation/js";
 
 const addressSignaturesLimit = 20;
 const solConversionFactor = 1e9;
@@ -12,7 +11,6 @@ const useWalletData = () => {
   const [balance, setBalance] = useState<number | null>(null);
   const [transactions, setTransactions] = useState<any[]>([]);
   const [tokens, setTokens] = useState<any[]>([]);
-  const [nfts, setNfts] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchWalletData = async () => {
@@ -61,17 +59,6 @@ const useWalletData = () => {
             };
           });
           setTokens(tokenDetails);
-
-          // Fetch NFTs using Metaplex
-          const metaplex = Metaplex.make(connection).use(
-            walletAdapterIdentity({ publicKey })
-          );
-
-          const nftList = await metaplex.nfts().findAllByOwner({
-            owner: publicKey, // The correct way to pass the owner
-          });
-
-          setNfts(nftList);
         } catch (error) {
           console.error("Error fetching wallet data:", error);
         }
@@ -81,7 +68,7 @@ const useWalletData = () => {
     fetchWalletData();
   }, [publicKey, connection]);
 
-  return { balance, transactions, tokens, nfts };
+  return { balance, transactions, tokens };
 };
 
 export default useWalletData;

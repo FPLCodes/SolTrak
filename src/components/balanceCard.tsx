@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Card,
   CardContent,
@@ -8,9 +10,11 @@ import {
 import { cn } from "@/lib/utils";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation"; // Import usePathname for route detection
 
 export default function BalanceCard({ SOLBalance }: { SOLBalance: number }) {
   const [solToUsdRate, setSolToUsdRate] = useState<number>(0);
+  const pathname = usePathname(); // Get the current path
 
   useEffect(() => {
     const fetchConversionRate = async () => {
@@ -59,7 +63,10 @@ export default function BalanceCard({ SOLBalance }: { SOLBalance: number }) {
       <CardHeader>
         <CardTitle>Balance</CardTitle>
         <CardDescription>Current balance in your wallet</CardDescription>
-        <WalletMultiButton className="wallet-adapter-button mt-2" />
+        {/* Conditionally render WalletMultiButton only if on the /your-wallet page */}
+        {pathname === "/your-wallet" && (
+          <WalletMultiButton className="wallet-adapter-button mt-2" />
+        )}
       </CardHeader>
       <CardContent className="mt-3">
         <div className="flex h-full items-center justify-between">

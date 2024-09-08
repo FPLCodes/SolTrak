@@ -52,7 +52,7 @@ export default function BalanceCard({ SOLBalance }: { SOLBalance: number }) {
   return (
     <Card
       className={cn(
-        "min-w-[300px] min-h-[360px] lg:min-h-fit card bg-primary rounded-xl"
+        "min-w-[300px] min-h-[250px] lg:min-h-fit card bg-primary rounded-xl"
       )}
     >
       <CardHeader>

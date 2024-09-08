@@ -69,10 +69,10 @@ const UserWallet = () => {
   // If the user has not connected their wallet, display a message.
   if (!publicKey) {
     return (
-      <div className="text-center mt-28 text-2xl mx-auto w-11/12 md:w-3/4 lg:w-2/3 my-8">
+      <div className="text-center mt-28 text-2xl mx-auto w-11/12 md:w-10/12 lg:w-9/12 xl:w-2/3 my-8">
         <h2 className="mt-2">Connect your wallet to view your details</h2>
         <p className="text-sm text-muted mt-4">
-          Press Select Wallet button on the top right to connect
+          Press the Select Wallet button on the top right to connect
         </p>
       </div>
     );
@@ -80,25 +80,25 @@ const UserWallet = () => {
 
   // If the wallet is connected, display the wallet data.
   return (
-    <div className="mx-auto w-11/12 xl:w-2/3 my-8">
-      <div className="flex space-x-4">
-        <div className="flex flex-col space-y-4">
+    <div className="mx-auto w-11/12 md:w-10/12 lg:w-9/12 xl:w-2/3 my-8">
+      <div className="flex flex-col lg:flex-row lg:space-x-4">
+        <div className="sm:flex lg:flex-col lg:space-y-4 sm:space-x-4 lg:space-x-0">
           <BalanceCard SOLBalance={balance == null ? 0 : balance} />
           <PieChart tokens={tokens} />
         </div>
 
         {historicalData.length > 0 ? (
-          <Card className="w-full">
+          <Card className="w-full mt-4 lg:mt-0">
             <CardHeader>
               <CardTitle>Balance Over Time</CardTitle>
               <CardDescription>Balance of the wallet over time</CardDescription>
             </CardHeader>
-            <CardContent className="flex justify-center items-center w-full h-full mt-6">
+            <CardContent className="flex justify-center items-center h-full w-full">
               <LineChart data={historicalData} />
             </CardContent>
           </Card>
         ) : (
-          <Card className="w-full">
+          <Card className="w-full mt-4 lg:mt-0">
             <CardHeader>
               <CardTitle>Balance Over Time</CardTitle>
               <CardDescription>No historical data available</CardDescription>

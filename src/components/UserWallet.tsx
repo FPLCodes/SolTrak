@@ -17,6 +17,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 
 // Helper function to calculate historical balances
 const calculateHistoricalBalances = (
@@ -70,10 +71,8 @@ const UserWallet = () => {
   if (!publicKey) {
     return (
       <div className="text-center mt-28 text-2xl mx-auto w-11/12 md:w-10/12 lg:w-9/12 xl:w-2/3 my-8">
-        <h2 className="mt-2">Connect your wallet to view your details</h2>
-        <p className="text-sm text-muted mt-4">
-          Press the Select Wallet button on the top right to connect
-        </p>
+        <h2 className="my-4">Connect your wallet to view your details</h2>
+        <WalletMultiButton className="wallet-adapter-button" />
       </div>
     );
   }

@@ -6,6 +6,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { useEffect, useState } from "react";
 
 export default function BalanceCard({ SOLBalance }: { SOLBalance: number }) {
@@ -58,6 +59,7 @@ export default function BalanceCard({ SOLBalance }: { SOLBalance: number }) {
       <CardHeader>
         <CardTitle>Balance</CardTitle>
         <CardDescription>Current balance in your wallet</CardDescription>
+        <WalletMultiButton className="wallet-adapter-button mt-2" />
       </CardHeader>
       <CardContent className="mt-3">
         <div className="flex h-full items-center justify-between">

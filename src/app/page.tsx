@@ -148,8 +148,8 @@ export default function Home() {
                 </CardHeader>
                 <CardContent>
                   <p>
-                    "SolTrak has revolutionized how I manage my Solana assets.
-                    The insights are invaluable!"
+                    &quot;SolTrak has revolutionized how I manage my Solana
+                    assets. The insights are invaluable!&quot;
                   </p>
                 </CardContent>
               </Card>
@@ -160,8 +160,9 @@ export default function Home() {
                 </CardHeader>
                 <CardContent>
                   <p>
-                    "I love how easy it is to use SolTrak. It's both powerful
-                    and intuitive - perfect for beginners and pros alike."
+                    &quot;I love how easy it is to use SolTrak. It&apos;s both
+                    powerful and intuitive - perfect for beginners and pros
+                    alike.&quot;
                   </p>
                 </CardContent>
               </Card>
@@ -217,7 +218,7 @@ export default function Home() {
                 </h2>
                 <p className="mx-auto max-w-[600px] text-primary-foreground/80 md:text-xl">
                   Join thousands of users who are already benefiting from
-                  SolTrak's powerful features.
+                  SolTrak&apos;s powerful features.
                 </p>
               </div>
               <div className="space-x-4">

@@ -49,6 +49,7 @@ const LineChart = ({
 
   const options = {
     responsive: true,
+    maintainAspectRatio: true,
     plugins: {
       legend: {
         display: false, // Hide the legend
@@ -71,7 +72,7 @@ const LineChart = ({
   };
 
   return (
-    <div className="h-[350px] w-full">
+    <div className="w-full h-full place-self-center min-h-[250px]">
       <Line data={chartData} options={options} />
     </div>
   );

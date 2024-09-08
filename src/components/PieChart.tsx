@@ -40,6 +40,8 @@ const PieChart = ({ tokens }: { tokens: Array<any> }) => {
   };
 
   const options = {
+    responsive: true,
+    maintainAspectRatio: true,
     plugins: {
       legend: {
         display: false, // Hide the legend
@@ -48,7 +50,11 @@ const PieChart = ({ tokens }: { tokens: Array<any> }) => {
   };
 
   return (
-    <Card className={cn("w-[360px] h-[360px] text-primary-foreground")}>
+    <Card
+      className={cn(
+        "min-w-[250px] min-h-[250px] w-full h-full text-primary-foreground mt-4 sm:mt-0"
+      )}
+    >
       <CardHeader>
         <CardTitle className="text-white">Token Distribution</CardTitle>
         <CardDescription className="text-muted-foreground">

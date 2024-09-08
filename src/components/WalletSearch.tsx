@@ -133,7 +133,7 @@ const WalletSearch = () => {
   };
 
   return (
-    <div className="mx-auto w-11/12 md:w-3/4 lg:w-2/3 my-8">
+    <div className="mx-auto w-11/12 md:w-10/12 lg:w-9/12 xl:w-2/3 my-8">
       <div className="flex justify-between mt-4">
         <input
           type="text"
@@ -173,20 +173,20 @@ const WalletSearch = () => {
         balance !== null &&
         tokens !== null && (
           <div className="mt-4 w-full">
-            <div className="flex space-x-4">
-              <div className="flex flex-col space-y-4">
+            <div className="flex flex-col lg:flex-row lg:space-x-4">
+              <div className="sm:flex lg:flex-col lg:space-y-4 sm:space-x-4 lg:space-x-0">
                 <BalanceCard SOLBalance={balance} />
                 <PieChart tokens={tokens} />
               </div>
               {historicalData.length > 0 ? (
-                <Card className="w-full">
+                <Card className="w-full mt-4 lg:mt-0">
                   <CardHeader>
                     <CardTitle>Balance Over Time</CardTitle>
                     <CardDescription>
                       Balance of the wallet over time
                     </CardDescription>
                   </CardHeader>
-                  <CardContent className="flex w-full mt-6">
+                  <CardContent className="flex justify-center items-center h-full w-full">
                     <LineChart data={historicalData} />
                   </CardContent>
                 </Card>

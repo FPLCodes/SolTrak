@@ -4,6 +4,7 @@ import { FC, useEffect, useState } from "react";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import Image from "next/image";
 
 const WalletConnection: FC = () => {
   const [mounted, setMounted] = useState(false);
@@ -21,6 +22,12 @@ const WalletConnection: FC = () => {
       <div className="container flex h-14 max-w-screen-xl items-center">
         <div className="mr-4 flex">
           <Link className="mr-6 flex items-center space-x-2" href="/">
+            <Image
+              src="/SolTrak.png"
+              alt="SolTrak Logo"
+              width={32}
+              height={32}
+            />
             <span className="hidden font-bold sm:inline-block">SolTrak</span>
           </Link>
         </div>

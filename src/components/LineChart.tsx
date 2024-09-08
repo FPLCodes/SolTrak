@@ -72,7 +72,7 @@ const LineChart = ({
   };
 
   return (
-    <div className="w-full h-full place-self-center min-h-[250px]">
+    <div className="w-full h-full place-content-center">
       <Line data={chartData} options={options} />
     </div>
   );
